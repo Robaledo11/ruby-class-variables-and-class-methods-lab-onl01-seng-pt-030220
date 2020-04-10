@@ -1,46 +1,15 @@
-<<<<<<< HEAD
-require 'pry'
+class MP3Importer	
 
-class Song
-  attr_accessor :name, :artist, :genre
+    attr_accessor :path	
 
-  @@count = 0
-  @@genres = []
-  @@artists = []
+    def initialize(path)	
+        @path = path	
+    end	
 
-  def initialize(name, artist, genre)
-    @name = name
-    @artist = artist
-    @genre = genre
+    def files	
+        files ||= Dir["#{@path}/*"].collect {|song| song.gsub("#{@path}/", "")}	
+    end	
 
-    @@artists << artist
-    @@genres << genre
-    @@count += 1
-  end
-
-  def self.count
-    @@count
-  end
-
-  def self.genres
-    @@genres.uniq  
-  end
-
-  def self.artists
-    @@artists.uniq 
-  end
-
-  def self.genre_count
-    @@genres.each_with_object(Hash.new(0)) do |key, hash| 
-      hash[key] += 1
-    end
-  end
-
-  def self.artist_count
-    @@artists.each_with_object(Hash.new(0)) do |key, hash|
-      hash[key] += 1
-    end
-  end
-
-end
-
+    def import	
+       files.each {|song| Song.new_by_filename(song)}	
+    end	
